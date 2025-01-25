@@ -4,6 +4,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import pickle
 from sklearn.ensemble import RandomForestRegressor
+import pandas as pd
+import numpy as np
 
 app = FastAPI()
 
@@ -28,8 +30,15 @@ def read_root():
 
 @app.post("/prediction")
 def make_prediction(entry: Entry):
-    model = pickle.load(open('../model/wine_rmodel.pkl', 'rb'))
-    test = [[entry.fixed_acidity, entry.volatile_acidity, entry.citric_acid,
-             entry.redisual_sugar, entry.chlorides, entry.free_sulfur_dioxide,
-             entry.total_sulfur_dioxide, entry.density, entry.pH, entry.sulphates, entry.alcohol]]
-    return model.predict([test])[0]
+    """Takes in a request with the features of a wine and returns the predicted quality of the wine."""
+    
+    data = pd.read_csv('./data/winequality-red.csv')
+    data.drop('quality', axis=1, inplace=True)
+
+    model = pickle.load(open('./model/wine_rmodel.pkl', 'rb'))
+    
+    # test_df = pd.DataFrame([entry.dict().values()], columns=data.columns)
+    print(list(entry.dict().values()))
+    # print()
+    # return {"result": model.predict(test_df)}
+    return model.predict([np.array(list(entry.dict().values()))])
