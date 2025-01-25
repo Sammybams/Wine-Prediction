@@ -19,5 +19,5 @@ def read_root():
 
 @app.post("/prediction")
 def make_prediction(entry: Entry):
+    return
     # return {"item_id": item_id, "q": q}
-
