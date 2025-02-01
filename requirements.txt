@@ -2,6 +2,6 @@ scikit-learn
 numpy
 pandas
 matplotlib
-"fastapi[standard]"
+fastapi[standard]
 pydantic
 typing
